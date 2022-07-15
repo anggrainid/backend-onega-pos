@@ -64,6 +64,15 @@ class CustomerController extends Controller
      */
     public function show($id)
     {
+        $cust = Customer::find($id);
+        if (is_null($cust)){
+            return $this->sendError('Customer not found.');
+
+        }
+        return response()->json([
+            'status' => 'Customer retrieved successfully',
+            'data' => $cust,
+        ]);
         //
     }
 
@@ -88,13 +97,16 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        $cust = Customer::find($id);
-        $cust->code = $request->code;
-        $cust->name= $request->name;
-        $cust->address = $request->address;
-        $cust->phone_num= $request->phone_num;
+        //$cust = new Customer;
+       // $id = $request->id; 
+        $cust = Customer::findOrFail($id);
+        $cust->update($request->all());
+        //$cust->code = $request->code;
+        //$cust->name= $request->name;
+        //$cust->address = $request->address;
+        //$cust->phone_num= $request->phone_num;
 
-        $cust->save();
+        $cust->update();
         return response()->json([
             'status' => 'data updated successuflly',
             'data' => $cust,
@@ -108,24 +120,24 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) //menangkap id yang dikirimkan dari form, yaitu ketika tombol Hapus di klik    
+    public function destroy(Customer $id) //menangkap id yang dikirimkan dari form, yaitu ketika tombol Hapus di klik    
     {
-        $cust = Customer::find($id); 
-        $cust->delete();
+        //$cust = Customer::find($id); 
+        $id->delete();
 
         return response()->json([
             'status' => 'data deleted successuflly',
-            'data' => $cust,
+            'data' => $id,
         ]);
     }
 
-    public function search(Request $request)
+    public function search($keyword)
     {
-        $search = $request->get('search');
-        $cust = Cust::where('code', 'like', "%".$search."%")->
-        orwhere('name', 'like', "%".$search."%")->orwhere('id', 'like', "%".$search."%");
+        //$search = $request->get('search');
+        $result = Customer::where('code', 'like', '%'.$keyword.'%')->
+        orwhere('name', 'like', '%'.$keyword.'%')->orwhere('id', 'like', '%'.$keyword.'%') -> get();
  
-        return response()->json($cust);
+        return response()->json($result);
     }
 
 }
