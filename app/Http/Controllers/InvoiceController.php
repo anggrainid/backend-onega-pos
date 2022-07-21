@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\Cart;
 use Illuminate\Validation\Rule;
 
 class InvoiceController extends Controller
@@ -21,7 +22,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::all();
         return response()->json([
             'status' => 'success',
-            'data' => $cust,
+            'data' => $invoice,
         ]);
     }
 
@@ -123,5 +124,39 @@ class InvoiceController extends Controller
             'status' => 'data deleted successuflly',
             'data' => null,
         ]);
+    }
+
+    public function invoice($id)
+    {
+        $cart = Cart::find($id);
+        
+        // $this->validate($request,[
+
+        //     //
+        // ]);
+        $invoice = new Invoice();
+
+                  
+        $invoice->customer_id=$cart->customer_id;
+        $invoice->cart_date=$cart->cart_date;
+        $invoice->subtotal=$cart->subtotal;
+        $invoice->discount=$cart->discount;
+        $invoice->tax=$cart->tax;
+        $invoice->total_price=$cart->total_price;
+        $invoice->notes=$cart->notes;
+        $invoice->save();
+        
+
+
+        //$invoice = update($request->all());
+        //$invoice = Invoice::create($request->all());
+
+        $cart->delete();
+
+        return response()->json([
+            'status' => 'data added successfully',
+            'data' => $invoice,
+        ]);
+        
     }
 }
