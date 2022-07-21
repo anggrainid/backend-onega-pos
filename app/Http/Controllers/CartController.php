@@ -48,13 +48,13 @@ class CartController extends Controller
         //     ''
         // ]);
         $rules = [
-            'customer_id'=> 'required',
-            'cart_date'=> 'required',
-            'subtotal'=> 'required',
-            'discount'=> 'required',
-            'tax'=> 'required',
-            'total_price'=> 'required',
-            'notes'=> 'required',
+            'customer_id'=> 'required|integer',
+            'cart_date'=> 'required|date_format',
+            'subtotal'=> 'required|numeric',
+            'discount'=> 'required|numeric',
+            'tax'=> 'required|numeric',
+            'total_price'=> 'required|numeric',
+            'notes'=> 'required|numeric',
             
         ];
         $validator = Validator::make($request->all(),$rules);
