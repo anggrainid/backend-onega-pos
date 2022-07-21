@@ -17,9 +17,7 @@ class Cart extends Model
         'discount',
         'tax',
         'total_price',
-        'notes'
-
-        => 'required'
+        'notes',
     ];
 
     /***

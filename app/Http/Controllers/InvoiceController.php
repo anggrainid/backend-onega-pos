@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use Illuminate\Validation\Rule;
 
 class InvoiceController extends Controller
 {
@@ -29,23 +33,7 @@ class InvoiceController extends Controller
     public function create()
     {
         //
-        $this->validate($request,[
 
-            //
-        ]);
-
-
-        $cust = new Customer;
-        $cust->code = $request->code;
-        $cust->name= $request->name;
-        $cust->address = $request->address;
-        $cust->phone_num= $request->phone_num;
-
-        $cust->save();
-        return response()->json([
-            'status' => 'data added successfully',
-            'data' => $cust,
-        ]);
 
     }
 
@@ -58,6 +46,18 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request,[
+
+            //
+        ]);
+
+
+        $invoice = Invoice::create($request->all());
+
+        return response()->json([
+            'status' => 'data added successfully',
+            'data' => $invoice,
+        ]);
         
     }
 
@@ -70,6 +70,11 @@ class InvoiceController extends Controller
     public function show($id)
     {
         //
+        $invoice = Invoice::find($id);
+        return response()->json([
+            'status' => 'data retrieved successfully',
+            'data' => $invoice,
+        ]);
     }
 
     /**
@@ -93,6 +98,13 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $invoice = Invoice::find($id);
+        $invoice = update($request->all());
+
+        return response()->json([
+            'status' => 'data updated successfully',
+            'data' => $invoice,
+        ]);
     }
 
     /**
@@ -104,5 +116,12 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         //
+        $invoice = Invoice::find($id);
+        $invoice->delete();
+
+        return response()->json([
+            'status' => 'data deleted successuflly',
+            'data' => null,
+        ]);
     }
 }

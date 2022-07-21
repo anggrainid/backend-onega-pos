@@ -11,12 +11,13 @@ class CartItem extends Model
     //use HasFactory;
     use SoftDeletes;
     
+    protected $table = 'cart_items';
     protected $fillable = [
-        'invoice_id',
-        'sku_code',
+        'cart_id',
+        'product_id',
         'discount',
         'quantity',
-        'price'
+        'price',
     ];
 
     public function cartitem_cart(){

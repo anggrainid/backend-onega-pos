@@ -24,7 +24,7 @@ class CreateCartsTable extends Migration
             $table->double('discount')->nullable();
             $table->double('tax')->nullable();
             $table->double('total_price')->nullable();
-            $table->text('notes')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

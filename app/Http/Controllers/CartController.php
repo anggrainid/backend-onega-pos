@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+//use Validator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use Illuminate\Validation\Rule;
+
 
 class CartController extends Controller
 {
@@ -17,6 +21,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::all();
+        //$cartItems = CartItem::all();
         return response()->json([
             'status' => 'success',
             'data' => $cart,
@@ -54,7 +59,7 @@ class CartController extends Controller
             'discount'=> 'required|numeric',
             'tax'=> 'required|numeric',
             'total_price'=> 'required|numeric',
-            'notes'=> 'required|numeric',
+            'notes'=> 'required|string',
             
         ];
         $validator = Validator::make($request->all(),$rules);
@@ -78,7 +83,7 @@ class CartController extends Controller
     {
         $cart = Cart::find($id);
         return response()->json([
-            'status' => 'data added successfully',
+            'status' => 'data retrieved successfully',
             'data' => $cart,
         ]);
     }
