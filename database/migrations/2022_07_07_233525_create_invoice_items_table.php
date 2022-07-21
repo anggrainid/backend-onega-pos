@@ -14,9 +14,18 @@ class CreateInvoiceItemsTable extends Migration
     public function up()
     {
         Schema::create('invoice_items', function (Blueprint $table) {
-            $table->id();
+            $table->id()->unique();
+            $table->unsignedBigInteger('invoice_id');
+            $table->unsignedBigInteger('product_id');
+            $table->double('discount')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->double('price')->nullable();
+
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
-        });
+            $table->softDeletes();
+    });
     }
 
     /**

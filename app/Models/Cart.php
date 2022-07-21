@@ -16,6 +16,8 @@ class Cart extends Model
         'tax',
         'total_price',
         'notes'
+
+        => 'required'
     ];
 
     /***
@@ -25,7 +27,16 @@ class Cart extends Model
         }
     */
     public function customer_cart(){
-        return $this-> belongsTo('App\Customer', 'customer_id', 'id');
+        return $this-> belongsTo('App\Models\Customer', 'customer_id', 'id');
     }
+    public function cartitem_cart(){
+        return $this->hasMany('App\Models\Cart', 'cart_id', 'id');
+
+    }
+    // public function cart_item()
+    // {
+    //     return $this->belongsToMany(Product::class, 'cart_items')->withPivot('quantity');
+    // }
+
 
 }

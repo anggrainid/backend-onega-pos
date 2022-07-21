@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
-    use HasFactory;
+    //use HasFactory;
 
     protected $table = 'customers';
     protected $fillable = [
@@ -17,7 +17,10 @@ class Customer extends Model
         'phone_num'
     ];
 
-    public function carts_customer(){
-        return $this->hasMany('App\Customer', 'customer_id', 'id');
+    public function customer_carts(){
+        return $this->hasMany('App\Models\Cart', 'customer_id', 'id');
     }
+
+
+
 }

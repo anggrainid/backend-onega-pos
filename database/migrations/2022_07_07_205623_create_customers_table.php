@@ -19,7 +19,10 @@ class CreateCustomersTable extends Migration
             $table->string('name');
             $table->text('address')->nullable();
             $table->string('phone_num')->nullable();
+            //$table->foreignId('user_id');
+            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
