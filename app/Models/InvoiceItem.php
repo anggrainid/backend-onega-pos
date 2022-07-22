@@ -10,20 +10,21 @@ class InvoiceItem extends Model
 {
     //use HasFactory;
     use SoftDeletes;
+    protected $table = 'invoice_items';
     protected $fillable = [
         'invoice_id',
-        'sku_code',
+        'product_id',
         'discount',
         'quantity',
-        'price'
+        'price',
     ];
 
-    public function invoiceitem_invoice(){
+    public function invoice(){
         return $this->belongsTo('App\Models\Invoice', 'invoice_id', 'id');
 
     }
-    public function invoiceitem_product(){
-        return $this->hasOne('App\Models\Product', 'sku_code', 'sku_code');
+    public function product(){
+        return $this->hasOne('App\Models\Product', 'product_id', 'id');
 
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Illuminate\Validation\Rule;
 
 
@@ -18,13 +20,30 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function byCartId($id)
     {
-        $cart = Cart::all();
-        //$cartItems = CartItem::all();
+        //
+        $cart = Cart::find($id);
+        $cart_cart_items = Cart::with('cart_items')
+            ->where('id', $cart->id)->get();
+        //$cartItem = CartItem::all();
         return response()->json([
             'status' => 'success',
-            'data' => $cart,
+            'data' => $cart_cart_items, //$cart_items->cart_items->get(),
+        ]);
+
+       
+    }
+
+    public function index()
+    {
+        $carts = Cart::with('cart_items')->get();
+        // $cartItems = Cart::with('cart_items')->get();
+        // $cart_items = CartItem::get()->cart_items();
+        return response()->json([
+            'status' => 'success',
+            'data' => $carts, //$cart_items->cart_items->get(),
         ]);
         // $cart = Cart::where('id',$id)->first();
     }
@@ -137,6 +156,52 @@ class CartController extends Controller
             'data' => null,
         ]);
     }
+
+    public function get_invoice($id)
+    {
+        $cart = Cart::find($id);
+        $cartItems = CartItem::where('cart_id', $id)->get()->all();
+        //dd($cartItems);
+        //$cartItems = $cart->cart_items->first();
+        
+        // $this->validate($request,[
+
+        // ]);
+        $invoice = new Invoice();    
+        $invoice->customer_id=$cart->customer_id;
+        $invoice->cart_date=$cart->cart_date;
+        $invoice->subtotal=$cart->subtotal;
+        $invoice->discount=$cart->discount;
+        $invoice->tax=$cart->tax;
+        $invoice->total_price=$cart->total_price;
+        $invoice->notes=$cart->notes;
+        $invoice->save();
+
+        foreach ($cartItems as $cartItem){
+
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->invoice_id=$cartItem->cart_id;
+            $invoiceItem->product_id=$cartItem->product_id;
+            $invoiceItem->discount=$cartItem->discount;
+            $invoiceItem->quantity=$cartItem->quantity;
+            $invoiceItem->price=$cartItem->price;
+            $invoiceItem->save();
+
+            $cartItem->delete();
+
+        }
+
+        // $invoice_invoice_items = Invoice::with('invoice_items')
+        //     ->where('id', $invoice->id)->get();
+        return response()->json([
+            'status' => 'get invoice successfully',
+            // 'data' => $invoice_invoice_items,
+            //'cart' => $invoice,
+        ]);
+        
+    }
+    
+    
 
     // public function invoice($no_order)
     // {

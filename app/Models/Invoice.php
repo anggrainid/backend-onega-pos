@@ -12,6 +12,7 @@ class Invoice extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'customer_id',
         'cart_id',
         'cart_date',
         'subtotal',
@@ -21,11 +22,14 @@ class Invoice extends Model
         'notes'
     ];
 
-    public function cart_invoice(){
-        return $this->hasOne('App\Models\Cart', 'cart_id', 'id');
+    // public function cart_invoice(){
+    //     return $this->hasOne('App\Models\Cart', 'cart_id', 'id');
 
+    //
+    public function customer(){
+        return $this-> belongsTo('App\Models\Customer', 'customer_id', 'id');
     }
-    public function invoiceitem_invoice(){
+    public function invoice_items(){
         return $this->hasMany('App\Models\InvoiceItem', 'invoice_id', 'id');
     }
 }
