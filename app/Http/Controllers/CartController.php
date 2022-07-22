@@ -191,6 +191,7 @@ class CartController extends Controller
 
         }
 
+        $cart->delete();
         // $invoice_invoice_items = Invoice::with('invoice_items')
         //     ->where('id', $invoice->id)->get();
         return response()->json([
