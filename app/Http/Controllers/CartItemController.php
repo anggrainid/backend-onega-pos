@@ -27,6 +27,14 @@ class CartItemController extends Controller
         ]);
     }
 
+    public function getByCartId($id) {
+        $cartItem = CartItem::with('product')->where('cart_id', $id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $cartItem
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -97,7 +105,7 @@ class CartItemController extends Controller
         $cartItem = CartItem::findOrFail($id);
         $cartItem->update($request->all());
 
-        $cart->update();
+        $cartItem->update();
         return response()->json([
             'status' => 'data updated successuflly',
             'data' => $cartItem,

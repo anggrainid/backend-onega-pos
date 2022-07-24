@@ -20,12 +20,12 @@ class CartItem extends Model
         'price',
     ];
 
-    public function cartitem_cart(){
+    public function cart(){
         return $this->belongsTo('App\Models\Cart', 'cart_id', 'id');
 
     }
-    public function cartitem_product(){
-        return $this->belongsTo('App\Models\Product', 'sku_code', 'sku_code');
+    public function product(){
+        return $this->belongsTo('App\Models\Product', 'product_id', 'id');
 
     }
 }
