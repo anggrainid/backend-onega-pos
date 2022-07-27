@@ -21,11 +21,11 @@ class CartItem extends Model
     ];
 
     public function cart(){
-        return $this->belongsTo('App\Models\Cart', 'cart_id', 'id');
+        return $this->belongsTo('App\Models\Cart','cart_id', 'id');
 
     }
     public function product(){
-        return $this->belongsTo('App\Models\Product', 'product_id', 'id');
+        return $this->hasOne('App\Models\Product', 'product_id', 'id');
 
     }
 }

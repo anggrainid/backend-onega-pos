@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 
 class InvoiceItemController extends Controller
 {
@@ -11,9 +13,30 @@ class InvoiceItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function byInvoice($id)
+    {
+        //
+        $invoice = Invoice::find($id);
+        //$cartItem = CartItem::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoice ->invoice_items, //$cart_items->cart_items->get(),
+        ]);
+
+       
+    }
+    
     public function index()
     {
         //
+        $invoiceItem = InvoiceItem::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoiceItem
+            //'cartItem' => $cartItem,
+
+        ]);
     }
 
     /**

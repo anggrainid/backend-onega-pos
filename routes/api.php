@@ -32,13 +32,28 @@ Route::get('/customer/list/{id}',[CustomerController::class, 'show'])->name('cus
 Route::put('/customer/update/{id}',[CustomerController::class, 'update'])->name('customer.update');
 Route::delete('/customer/delete/{id}',[CustomerController::class, 'destroy'])->name('customer.destroy');
 Route::get('/customer/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
-Route::post('/invoice/create/{id}',[InvoiceController::class, 'invoice'])->name('invoice.create');
 
 Route::apiResource('carts', CartController::class);
 //Route::post('/carts/get_invoice', CartController::class, 'get_invoice');
 Route::apiResource('carts_item', CartItemController::class);
 Route::get('carts_item/getByCartId/{id}', [CartItemController::class, 'getByCartId']);
+
+
+//Route::post('/carts/invoice', CartController::class, 'invoice');
 //Route::post('/carts/get_invoice_item', CartController::class, 'get_invoice_item');
-//Route::apiResource('invoices', InvoiceController::class);
-Route::apiResource('invoices_item', InvoiceItemController::class);
-Route::apiResource('products', ProductController::class);
+
+Route::apiResource('carts', CartController::class)->except(['create', 'edit']);
+Route::get('/cart/{id}',[CartController::class, 'byCartId'])->name('cart.byCartId');
+Route::post('/cart/{id}/get_invoice',[CartController::class, 'get_invoice'])->name('cart.getInvoice');
+
+Route::apiResource('carts_item', CartItemController::class)->except(['create', 'edit']);
+Route::get('/cart/{id}/cart_items',[CartItemController::class, 'byCart'])->name('cart_items.byCart');
+Route::post('/cart_item/{id}/get_invoice_item',[CartItemController::class, 'get_invoice_item'])->name('cart_items.getInvoiceItem');
+
+Route::apiResource('invoices', InvoiceController::class)->except(['create', 'edit']);
+Route::get('/invoice/{id}',[InvoiceController::class, 'byInvoiceId'])->name('invoice.byInvoiceId');
+
+Route::apiResource('invoices_item', InvoiceItemController::class)->except(['create', 'edit']);
+Route::get('/invoice/{id}/invoice_items',[InvoiceItemController::class, 'byInvoice'])->name('invoice_items.byInvoice');
+
+Route::apiResource('products', ProductController::class)->except(['create', 'edit']);

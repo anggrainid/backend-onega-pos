@@ -16,13 +16,31 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+
+    public function byInvoiceId($id)
+    {
+        //
+        $invoice = Invoice::find($id);
+        $invoice_invoice_items = Invoice::with('invoice_items')
+            ->where('id', $invoice->id)->get();
+        //$cartItem = CartItem::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoice_invoice_items, //$cart_items->cart_items->get(),
+        ]);
+
+
+       
+    }
+    
     public function index()
     {
         //
-        $invoice = Invoice::all();
+        $invoices = Invoice::with('invoice_items')->get();
         return response()->json([
             'status' => 'success',
-            'data' => $invoice,
+            'data' => $invoices,
         ]);
     }
 
@@ -126,37 +144,4 @@ class InvoiceController extends Controller
         ]);
     }
 
-    public function invoice($id)
-    {
-        $cart = Cart::find($id);
-        
-        // $this->validate($request,[
-
-        //     //
-        // ]);
-        $invoice = new Invoice();
-
-                  
-        $invoice->customer_id=$cart->customer_id;
-        $invoice->cart_date=$cart->cart_date;
-        $invoice->subtotal=$cart->subtotal;
-        $invoice->discount=$cart->discount;
-        $invoice->tax=$cart->tax;
-        $invoice->total_price=$cart->total_price;
-        $invoice->notes=$cart->notes;
-        $invoice->save();
-        
-
-
-        //$invoice = update($request->all());
-        //$invoice = Invoice::create($request->all());
-
-        $cart->delete();
-
-        return response()->json([
-            'status' => 'data added successfully',
-            'data' => $invoice,
-        ]);
-        
-    }
 }

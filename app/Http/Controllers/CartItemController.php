@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Invoce;
+use App\Models\InvoiceItem;
 
 class CartItemController extends Controller
 {
@@ -14,6 +16,19 @@ class CartItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function byCart($id)
+    {
+        //
+        $cart = Cart::find($id);
+        //$cartItem = CartItem::all();
+        return response()->json([
+            'status' => 'success',
+            'data' => $cart->cart_items, //$cart_items->cart_items->get(),
+        ]);
+
+       
+    }
     public function index()
     {
         //
@@ -127,6 +142,35 @@ class CartItemController extends Controller
         return response()->json([
             'status' => 'data deleted successuflly',
             'data' => null,
+        ]);
+    }
+
+    public function get_invoice_item($id)
+    {
+        $cartItem = CartItem::find($id);
+        
+        // $this->validate($request,[
+
+        //     //
+        // ]);
+        $invoiceItem = new InvoiceItem();
+        $invoiceItem->invoice_id=$cartItem->cart_id;
+        $invoiceItem->product_id=$cartItem->product_id;
+        $invoiceItem->discount=$cartItem->discount;
+        $invoiceItem->quantity=$cartItem->quantity;
+        $invoiceItem->price=$cartItem->price;
+        $invoiceItem->save();
+        
+
+
+        //$invoice = update($request->all());
+        //$invoice = Invoice::create($request->all());
+
+        $cartItem->delete();
+
+        return response()->json([
+            'status' => 'get invoice item successfully',
+            'data' => $invoiceItem,
         ]);
     }
 }
