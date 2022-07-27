@@ -18,4 +18,9 @@ class Product extends Model
         'description',
         'unit_price'
     ];
+
+    public function discount(){
+        return $this->hasOne('App\Models\Product', 'product_id', 'id');
+
+    }
 }

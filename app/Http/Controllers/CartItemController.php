@@ -33,7 +33,7 @@ class CartItemController extends Controller
     {
         //
         //$cart = Cart::all();
-        $cartItem = CartItem::all();
+        $cartItem = CartItem::with('products')->get();
         return response()->json([
             'status' => 'success',
             'data' => $cartItem
@@ -41,6 +41,7 @@ class CartItemController extends Controller
 
         ]);
     }
+    
 
     public function getByCartId($id) {
         $cartItem = CartItem::with('product')->where('cart_id', $id)->get();
