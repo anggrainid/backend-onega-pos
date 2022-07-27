@@ -18,6 +18,7 @@ class CartItem extends Model
         'discount',
         'quantity',
         'price',
+        'subtotal',
     ];
 
     public function cart(){
