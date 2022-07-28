@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Discount;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -42,27 +43,32 @@ class DatabaseSeeder extends Seeder
         // CARTS
         $cart = Cart::create([
             "customer_id" => $customer->id,
-            "cart_date" => "2020-01-01",
             "subtotal" => 0,
             "discount" => 0,
             "tax" => 0,
             "total_price" => 100000,
-            "notes" => "note here",
+            "notes" => "notes",
+        ]);
+        $discount = Discount::create([
+            "name" => "Promo Merdeka 5%",
+            "discount_amount" => "5"
         ]);
         // CARTS ITEM
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product1->id,
+            "discount_id" => $discount->id,
             "discount" => 5000,
             "quantity" => 1,
-            "price" => 100000,
+            "subtotal" => 100000,
         ]);
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product2->id,
+            "discount_id" => $discount->id,
             "discount" => 5000,
             "quantity" => 1,
-            "price" => 20000,
+            "subtotal" => 20000,
         ]);
     }
 }
