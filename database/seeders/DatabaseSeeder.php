@@ -29,16 +29,18 @@ class DatabaseSeeder extends Seeder
         // DISCOUNT
         $discount = Discount::create([
             "name" => "Promo Merdeka 5%",
-            "discount_amount" => "5"
+            "discount_amount" => 5000
         ]);
         // PRODUCT
         $product1 = Product::create([
+            "discount_id" => $discount->id,
             "sku_code" => "SKH-121",
             "product_name" => "Sun Kacang Hijau 100gr",
             "description" => null,
             "unit_price" => 100000,
         ]);
         $product2 = Product::create([
+            "discount_id" => $discount->id,
             "sku_code" => "ZWS-543",
             "product_name" => "Zwitsal Soap Classic 100gr",
             "description" => null,
