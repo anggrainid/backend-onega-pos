@@ -47,14 +47,12 @@ class InvoiceController extends Controller
     }
     public function byInvoiceId($id)
     {
-        //
         $invoice = Invoice::find($id);
         $invoice_invoice_items = Invoice::with('invoice_items')
             ->where('id', $invoice->id)->get();
-        //$cartItem = CartItem::all();
         return response()->json([
             'status' => 'success',
-            'data' => $invoice_invoice_items, //$cart_items->cart_items->get(),
+            'data' => $invoice_invoice_items,
         ]);
 
 
@@ -63,7 +61,6 @@ class InvoiceController extends Controller
     
     public function index()
     {
-        //
         $pagination = 15;
         $invoices = Invoice::with('invoice_items')->paginate($pagination);
         return response()->json([
@@ -80,8 +77,6 @@ class InvoiceController extends Controller
     public function create()
     {
         //
-
-
     }
 
     /**
@@ -92,13 +87,6 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $this->validate($request,[
-
-            //
-        ]);
-
-
         $invoice = Invoice::create($request->all());
 
         return response()->json([
@@ -116,7 +104,6 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
         $invoice = Invoice::find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
@@ -144,9 +131,8 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $invoice = Invoice::find($id);
-        $invoice = update($request->all());
+        $invoice = $invoice->update($request->all());
 
         return response()->json([
             'status' => 'data updated successfully',
@@ -162,7 +148,6 @@ class InvoiceController extends Controller
      */
     public function destroy($id)
     {
-        //
         $invoice = Invoice::find($id);
         $invoice->delete();
 

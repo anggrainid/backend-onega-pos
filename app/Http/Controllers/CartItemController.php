@@ -19,26 +19,20 @@ class CartItemController extends Controller
 
     public function byCart($id)
     {
-        //
         $cart = Cart::find($id);
-        //$cartItem = CartItem::all();
         return response()->json([
             'status' => 'success',
-            'data' => $cart->cart_items, //$cart_items->cart_items->get(),
+            'data' => $cart->cart_items,
         ]);
 
        
     }
     public function index()
     {
-        //
-        //$cart = Cart::all();
         $cartItem = CartItem::with('product')->get();
         return response()->json([
             'status' => 'success',
             'data' => $cartItem
-            //'cartItem' => $cartItem,
-
         ]);
     }
     
@@ -69,11 +63,6 @@ class CartItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $this->validate($request,[
-
-            //
-        ]);
         $cartItem = CartItem::create($request->all());
 
         return response()->json([
@@ -117,7 +106,6 @@ class CartItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $cartItem = CartItem::findOrFail($id);
         $cartItem->update($request->all());
 
@@ -136,7 +124,6 @@ class CartItemController extends Controller
      */
     public function destroy($id)
     {
-        //
         $cartItem = CartItem::find($id);
         $cartItem->delete();
 
@@ -150,10 +137,6 @@ class CartItemController extends Controller
     {
         $cartItem = CartItem::find($id);
         
-        // $this->validate($request,[
-
-        //     //
-        // ]);
         $invoiceItem = new InvoiceItem();
         $invoiceItem->invoice_id=$cartItem->cart_id;
         $invoiceItem->product_id=$cartItem->product_id;
@@ -162,11 +145,6 @@ class CartItemController extends Controller
         $invoiceItem->price=$cartItem->price;
         $invoiceItem->save();
         
-
-
-        //$invoice = update($request->all());
-        //$invoice = Invoice::create($request->all());
-
         $cartItem->delete();
 
         return response()->json([

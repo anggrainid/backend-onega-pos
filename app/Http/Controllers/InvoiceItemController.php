@@ -16,12 +16,10 @@ class InvoiceItemController extends Controller
     
     public function byInvoice($id)
     {
-        //
         $invoice = Invoice::find($id);
-        //$cartItem = CartItem::all();
         return response()->json([
             'status' => 'success',
-            'data' => $invoice ->invoice_items, //$cart_items->cart_items->get(),
+            'data' => $invoice ->invoice_items,
         ]);
 
        
@@ -29,13 +27,10 @@ class InvoiceItemController extends Controller
     
     public function index()
     {
-        //
         $invoiceItem = InvoiceItem::all();
         return response()->json([
             'status' => 'success',
             'data' => $invoiceItem
-            //'cartItem' => $cartItem,
-
         ]);
     }
 

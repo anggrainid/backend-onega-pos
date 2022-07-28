@@ -8,8 +8,7 @@ use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    //
-    public function getCustomer(){
+    public function index(){
         $cust = Customer::all();
         return response()->json([
             'status' => 'success',
@@ -36,12 +35,6 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-
-            //
-        ]);
-
-
         $cust = new Customer;
         $cust->code = $request->code;
         $cust->name= $request->name;
@@ -53,7 +46,6 @@ class CustomerController extends Controller
             'status' => 'data added successfully',
             'data' => $cust,
         ]);
-
     }
 
     /**
@@ -67,13 +59,11 @@ class CustomerController extends Controller
         $cust = Customer::find($id);
         if (is_null($cust)){
             return $this->sendError('Customer not found.');
-
         }
         return response()->json([
             'status' => 'Customer retrieved successfully',
             'data' => $cust,
         ]);
-        //
     }
 
     /**
@@ -84,7 +74,7 @@ class CustomerController extends Controller
      */
     public function edit($id)//menangkap id yang dikirimkan dari form, yaitu ketika tombol edit di klik
     {
-        //
+        
     }
 
     /**
@@ -97,14 +87,8 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        //$cust = new Customer;
-       // $id = $request->id; 
         $cust = Customer::findOrFail($id);
         $cust->update($request->all());
-        //$cust->code = $request->code;
-        //$cust->name= $request->name;
-        //$cust->address = $request->address;
-        //$cust->phone_num= $request->phone_num;
 
         $cust->update();
         return response()->json([
@@ -120,10 +104,10 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Customer $id) //menangkap id yang dikirimkan dari form, yaitu ketika tombol Hapus di klik    
+    public function destroy($id) //menangkap id yang dikirimkan dari form, yaitu ketika tombol Hapus di klik    
     {
-        //$cust = Customer::find($id); 
-        $id->delete();
+        $customer = Customer::find($id); 
+        $customer->delete();
 
         return response()->json([
             'status' => 'data deleted successuflly',
@@ -133,7 +117,6 @@ class CustomerController extends Controller
 
     public function search($keyword)
     {
-        //$search = $request->get('search');
         $result = Customer::where('code', 'like', '%'.$keyword.'%')->
         orwhere('name', 'like', '%'.$keyword.'%')->orwhere('id', 'like', '%'.$keyword.'%') -> get();
  

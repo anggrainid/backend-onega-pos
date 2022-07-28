@@ -15,7 +15,6 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        //
         $discount = Discount::all();
         return response()->json([
             'status' => 'success',

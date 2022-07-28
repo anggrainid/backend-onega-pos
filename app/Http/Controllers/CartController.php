@@ -23,29 +23,22 @@ class CartController extends Controller
 
     public function byCartId($id)
     {
-        //
         $cart = Cart::find($id);
         $cart_cart_items = Cart::with('cart_items')
             ->where('id', $cart->id)->get();
-        //$cartItem = CartItem::all();
         return response()->json([
             'status' => 'success',
-            'data' => $cart_cart_items, //$cart_items->cart_items->get(),
+            'data' => $cart_cart_items,
         ]);
-
-       
     }
 
     public function index()
     {
         $carts = Cart::with('cart_items')->get();
-        // $cartItems = Cart::with('cart_items')->get();
-        // $cart_items = CartItem::get()->cart_items();
         return response()->json([
             'status' => 'success',
-            'data' => $carts, //$cart_items->cart_items->get(),
+            'data' => $carts,
         ]);
-        // $cart = Cart::where('id',$id)->first();
     }
 
     /**
@@ -66,11 +59,6 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // $this->validate($request,[
-
-        //     ''
-        // ]);
         $rules = [
             'customer_id'=> 'required|integer',
             'cart_date'=> 'required|date_format',
@@ -79,11 +67,8 @@ class CartController extends Controller
             'tax'=> 'required|numeric',
             'total_price'=> 'required|numeric',
             'notes'=> 'required|string',
-            
         ];
         $validator = Validator::make($request->all(),$rules);
-
-
         $cart = Cart::create($request->all());
 
         return response()->json([
@@ -127,11 +112,8 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $cart = Cart::findOrFail($id);
         $cart->update($request->all());
-
-        $cart->update();
         return response()->json([
             'status' => 'data updated successuflly',
             'data' => $cart,
@@ -146,8 +128,6 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
-        //$id->delete();
         $cart = Cart::find($id);
         $cart->delete();
 
@@ -161,15 +141,9 @@ class CartController extends Controller
     {
         $cart = Cart::find($id);
         $cartItems = CartItem::where('cart_id', $id)->get()->all();
-        //dd($cartItems);
-        //$cartItems = $cart->cart_items->first();
-        
-        // $this->validate($request,[
 
-        // ]);
         $invoice = new Invoice();    
         $invoice->customer_id=$cart->customer_id;
-        //$invoice->cart_date=$cart->cart_date;
         $invoice->subtotal=$cart->subtotal;
         $invoice->discount=$cart->discount;
         $invoice->tax=$cart->tax;
@@ -178,7 +152,6 @@ class CartController extends Controller
         $invoice->save();
 
         foreach ($cartItems as $cartItem){
-
             $invoiceItem = new InvoiceItem();
             $invoiceItem->invoice_id=$cartItem->cart_id;
             $invoiceItem->product_id=$cartItem->product_id;
@@ -188,26 +161,12 @@ class CartController extends Controller
             $invoiceItem->save();
 
             $cartItem->delete();
-
         }
 
         $cart->delete();
-        // $invoice_invoice_items = Invoice::with('invoice_items')
-        //     ->where('id', $invoice->id)->get();
         return response()->json([
             'status' => 'get invoice successfully',
-            // 'data' => $invoice_invoice_items,
-            //'cart' => $invoice,
         ]);
         
     }
-    
-    
-
-    // public function invoice($no_order)
-    // {
-    //     $order = Order::with('productOrder')->where('no_order', $no_order)->first();
-
-    //     return view ('kasir.invoice', compact('order'));
-    // }
 }
