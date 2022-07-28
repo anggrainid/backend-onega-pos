@@ -26,6 +26,11 @@ class DatabaseSeeder extends Seeder
             "phone_num" => "6285800669010",
         ]);
 
+        // DISCOUNT
+        $discount = Discount::create([
+            "name" => "Promo Merdeka 5%",
+            "discount_amount" => "5"
+        ]);
         // PRODUCT
         $product1 = Product::create([
             "sku_code" => "SKH-121",
@@ -39,7 +44,6 @@ class DatabaseSeeder extends Seeder
             "description" => null,
             "unit_price" => 20000,
         ]);
-
         // CARTS
         $cart = Cart::create([
             "customer_id" => $customer->id,
@@ -48,10 +52,6 @@ class DatabaseSeeder extends Seeder
             "tax" => 0,
             "total_price" => 100000,
             "notes" => "notes",
-        ]);
-        $discount = Discount::create([
-            "name" => "Promo Merdeka 5%",
-            "discount_amount" => "5"
         ]);
         // CARTS ITEM
         CartItem::create([
