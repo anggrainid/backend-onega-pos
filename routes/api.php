@@ -43,8 +43,7 @@ Route::post('/cart_items/{id}/get_invoice_item',[CartItemController::class, 'get
 
 // INVOICES API
 Route::apiResource('invoices', InvoiceController::class);
-Route::get('/invoice/{id}',[InvoiceController::class, 'byInvoiceId'])->name('invoice.byInvoiceId');
-Route::post('/make_invoice',[InvoiceController::class, 'make_invoice'])->name('invoice.make_invoice');
+Route::post('/invoices/make_invoice',[InvoiceController::class, 'make_invoice'])->name('invoice.make_invoice');
 
 // INVOICE ITEMS API
 Route::apiResource('invoice_items', InvoiceItemController::class);
