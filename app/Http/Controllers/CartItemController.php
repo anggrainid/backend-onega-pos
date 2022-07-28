@@ -16,29 +16,9 @@ class CartItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function byCart($id)
-    {
-        $cart = Cart::find($id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $cart->cart_items,
-        ]);
-
-       
-    }
     public function index()
     {
         $cartItem = CartItem::with('product')->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $cartItem
-        ]);
-    }
-    
-
-    public function getByCartId($id) {
-        $cartItem = CartItem::with('product')->where('cart_id', $id)->get();
         return response()->json([
             'status' => 'success',
             'data' => $cartItem
@@ -79,7 +59,7 @@ class CartItemController extends Controller
      */
     public function show($id)
     {
-        $cartItem = CartItem::find($id);
+        $cartItem = CartItem::with('cart', 'product')->find($id);
         return response()->json([
             'status' => 'data added successfully',
             'data' => $cartItem,
@@ -150,6 +130,23 @@ class CartItemController extends Controller
         return response()->json([
             'status' => 'get invoice item successfully',
             'data' => $invoiceItem,
+        ]);
+    }
+
+    public function byCart($id)
+    {
+        $cart = Cart::find($id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $cart->cart_items,
+        ]);
+    }
+
+    public function getByCartId($id) {
+        $cartItem = CartItem::with('product')->where('cart_id', $id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $cartItem
         ]);
     }
 }

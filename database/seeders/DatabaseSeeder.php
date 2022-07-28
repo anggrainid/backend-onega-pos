@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Discount;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +26,12 @@ class DatabaseSeeder extends Seeder
             "name" => "I am number one",
             "address" => "yogyakarta",
             "phone_num" => "62812341234",
+        ]);
+        Customer::create([
+            "code" => "NUMBER2",
+            "name" => "I am number two",
+            "address" => "tegal",
+            "phone_num" => "62843214321",
         ]);
 
         // DISCOUNT
@@ -70,6 +78,23 @@ class DatabaseSeeder extends Seeder
             "product_id" => $product2->id,
             "quantity" => 1,
             "subtotal" => 15000,
+        ]);
+
+        // INVOICES
+        $invoice = Invoice::create([
+            "customer_id" => $customer->id,
+            "subtotal" => 120000,
+            "discount" => 20000,
+            "tax" => 12000,
+            "total_price" => 112000,
+            "notes" => "notes"
+        ]);
+        // INVOICE ITEMS
+        InvoiceItem::create([
+            "invoice_id" => $invoice->id,
+            "product_id" => $product1->id,
+            "quantity" => 1,
+            "subtotal" => 95000,
         ]);
     }
 }

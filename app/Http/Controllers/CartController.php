@@ -20,18 +20,6 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function byCartId($id)
-    {
-        $cart = Cart::find($id);
-        $cart_cart_items = Cart::with('cart_items')
-            ->where('id', $cart->id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $cart_cart_items,
-        ]);
-    }
-
     public function index()
     {
         $carts = Cart::with('cart_items')->get();
@@ -61,7 +49,6 @@ class CartController extends Controller
     {
         $rules = [
             'customer_id'=> 'required|integer',
-            'cart_date'=> 'required|date_format',
             'subtotal'=> 'required|numeric',
             'discount'=> 'required|numeric',
             'tax'=> 'required|numeric',
@@ -85,7 +72,7 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        $cart = Cart::find($id);
+        $cart = Cart::with('cart_items.product')->find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
             'data' => $cart,
@@ -167,6 +154,16 @@ class CartController extends Controller
         return response()->json([
             'status' => 'get invoice successfully',
         ]);
-        
+    }
+
+    public function byCartId($id)
+    {
+        $cart = Cart::find($id);
+        $cart_cart_items = Cart::with('cart_items')
+            ->where('id', $cart->id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $cart_cart_items,
+        ]);
     }
 }

@@ -14,9 +14,8 @@ class InvoiceItem extends Model
     protected $fillable = [
         'invoice_id',
         'product_id',
-        'discount',
         'quantity',
-        'price',
+        'subtotal',
     ];
 
     public function invoice(){

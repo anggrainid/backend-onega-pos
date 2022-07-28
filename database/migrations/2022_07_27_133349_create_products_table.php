@@ -21,8 +21,6 @@ class CreateProductsTable extends Migration
             $table->double('unit_price')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            //$table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
     }
 

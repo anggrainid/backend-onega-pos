@@ -84,7 +84,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
-        $product = Product::update($request->all());
+        $product->update($request->all());
 
         return response()->json([
             'status' => 'data added successfully',

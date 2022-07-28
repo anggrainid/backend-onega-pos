@@ -12,19 +12,7 @@ class InvoiceItemController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
-    
-    public function byInvoice($id)
-    {
-        $invoice = Invoice::find($id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $invoice ->invoice_items,
-        ]);
-
-       
-    }
-    
+     */    
     public function index()
     {
         $invoiceItem = InvoiceItem::all();
@@ -52,7 +40,11 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $invoiceItem = InvoiceItem::create($request->all());
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoiceItem
+        ]);
     }
 
     /**
@@ -63,7 +55,11 @@ class InvoiceItemController extends Controller
      */
     public function show($id)
     {
-        //
+        $invoiceItem = InvoiceItem::with('invoice', 'product')->find($id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoiceItem
+        ]);
     }
 
     /**
@@ -86,7 +82,12 @@ class InvoiceItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $invoiceItem = InvoiceItem::find($id);
+        $invoiceItem->update($request->all());
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoiceItem
+        ]);
     }
 
     /**
@@ -97,6 +98,20 @@ class InvoiceItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $invoiceItem = InvoiceItem::find($id);
+        $invoiceItem->delete();
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoiceItem
+        ]);
+    }
+
+    public function byInvoice($id)
+    {
+        $invoice = Invoice::find($id);
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoice ->invoice_items,
+        ]);
     }
 }

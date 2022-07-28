@@ -17,52 +17,9 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
-    public function make_invoice(Request $request)
-    {
-        $newInvoice = Invoice::create([
-            'customer_id'=>$request->customer_id,
-            'subtotal'=>$request->subtotal,
-            'discount'=>$request->discount,
-            'tax'=>$request->tax,
-            'total_price'=>$request->total_price,
-            'notes'=>$request->notes,
-        ]);
-        $newInvoiceItems = [];
-        foreach($request->items as $item){
-            $newInvoiceItem = InvoiceItem::create([
-                'invoice_id' => $newInvoice->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'subtotal' => $item['subtotal'],
-            ]);
-            $newInvoiceItems[] = $newInvoiceItem;
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'data' =>  $newInvoice,
-        ]);
-       
-    }
-    public function byInvoiceId($id)
-    {
-        $invoice = Invoice::find($id);
-        $invoice_invoice_items = Invoice::with('invoice_items')
-            ->where('id', $invoice->id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $invoice_invoice_items,
-        ]);
-
-
-       
-    }
-    
     public function index()
     {
-        $pagination = 15;
-        $invoices = Invoice::with('invoice_items')->paginate($pagination);
+        $invoices = Invoice::with('invoice_items')->get();
         return response()->json([
             'status' => 'success',
             'data' => $invoices,
@@ -104,7 +61,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with('invoice_items', 'customer')->find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
             'data' => $invoice,
@@ -157,4 +114,41 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function make_invoice(Request $request)
+    {
+        $newInvoice = Invoice::create([
+            'customer_id'=>$request->customer_id,
+            'subtotal'=>$request->subtotal,
+            'discount'=>$request->discount,
+            'tax'=>$request->tax,
+            'total_price'=>$request->total_price,
+            'notes'=>$request->notes,
+        ]);
+        $newInvoiceItems = [];
+        foreach($request->items as $item){
+            $newInvoiceItem = InvoiceItem::create([
+                'invoice_id' => $newInvoice->id,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['subtotal'],
+            ]);
+            $newInvoiceItems[] = $newInvoiceItem;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' =>  $newInvoice,
+        ]);
+    }
+
+    public function byInvoiceId($id)
+    {
+        $invoice = Invoice::find($id);
+        $invoice_invoice_items = Invoice::with('invoice_items')
+            ->where('id', $invoice->id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' => $invoice_invoice_items,
+        ]);
+    }
 }
