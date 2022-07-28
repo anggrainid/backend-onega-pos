@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Http\Controllers\Controller;
+use App\Models\Discount;
 
-class ProductController extends Controller
+class DiscountController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,13 +16,11 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $product = Product::with('discount')->get();
-        //$product= Product::all();
+        $discount = Discount::all();
         return response()->json([
             'status' => 'success',
-            'data' => $product,
+            'data' => $discount,
         ]);
-
     }
 
     /**
@@ -43,13 +42,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
-        $product = Product::create($request->all());
-
-        
-        return response()->json([
-            'status' => 'data added successfully',
-            'data' => $product,
-        ]);
     }
 
     /**
@@ -61,11 +53,6 @@ class ProductController extends Controller
     public function show($id)
     {
         //
-        $product = Product::find($id);
-        return response()->json([
-            'status' => 'data retrieved successfully',
-            'data' => $product,
-        ]);
     }
 
     /**
@@ -89,14 +76,6 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $product = Product::find($id);
-        $product = Product::update($request->all());
-
-        
-        return response()->json([
-            'status' => 'data added successfully',
-            'data' => $product,
-        ]);
     }
 
     /**
@@ -108,12 +87,5 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
-        $product = Product::find($id);
-        $product->delete();
-
-        return response()->json([
-            'status' => 'data deleted successuflly',
-            'data' => null,
-        ]);
     }
 }

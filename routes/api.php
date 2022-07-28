@@ -9,6 +9,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DiscountController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,3 +58,5 @@ Route::apiResource('invoices_item', InvoiceItemController::class)->except(['crea
 Route::get('/invoice/{id}/invoice_items',[InvoiceItemController::class, 'byInvoice'])->name('invoice_items.byInvoice');
 
 Route::apiResource('products', ProductController::class)->except(['create', 'edit']);
+
+Route::apiResource('discounts', DiscountController::class)->except(['create', 'edit']);

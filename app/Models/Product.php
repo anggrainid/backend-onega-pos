@@ -13,6 +13,7 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'discount_id',
         'sku_code',
         'product_name',
         'description',
@@ -20,7 +21,7 @@ class Product extends Model
     ];
 
     public function discount(){
-        return $this->hasOne('App\Models\Product', 'product_id', 'id');
+        return $this->hasOne('App\Models\Discount', 'discount_id', 'id');
 
     }
 }

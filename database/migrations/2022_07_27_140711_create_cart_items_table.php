@@ -17,7 +17,6 @@ class CreateCartItemsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedBigInteger('discount_id')->nullable();
             $table->double('discount')->nullable();
             $table->integer('quantity')->default(1);
             //$table->double('price')->nullable();
@@ -26,6 +25,7 @@ class CreateCartItemsTable extends Migration
 
             $table->foreign('cart_id')->references('id')->on('carts')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            //$table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

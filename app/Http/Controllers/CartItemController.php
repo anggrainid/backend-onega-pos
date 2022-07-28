@@ -33,7 +33,7 @@ class CartItemController extends Controller
     {
         //
         //$cart = Cart::all();
-        $cartItem = CartItem::with('products')->get();
+        $cartItem = CartItem::with('product')->get();
         return response()->json([
             'status' => 'success',
             'data' => $cartItem

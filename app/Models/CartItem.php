@@ -17,7 +17,6 @@ class CartItem extends Model
         'product_id',
         'discount',
         'quantity',
-        'price',
         'subtotal',
     ];
 
