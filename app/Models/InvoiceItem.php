@@ -27,4 +27,5 @@ class InvoiceItem extends Model
         return $this->hasOne('App\Models\Product', 'product_id', 'id');
 
     }
+
 }

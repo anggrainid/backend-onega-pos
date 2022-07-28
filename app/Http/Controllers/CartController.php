@@ -169,7 +169,7 @@ class CartController extends Controller
         // ]);
         $invoice = new Invoice();    
         $invoice->customer_id=$cart->customer_id;
-        $invoice->cart_date=$cart->cart_date;
+        //$invoice->cart_date=$cart->cart_date;
         $invoice->subtotal=$cart->subtotal;
         $invoice->discount=$cart->discount;
         $invoice->tax=$cart->tax;

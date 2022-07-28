@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Cart;
 use Illuminate\Validation\Rule;
 
@@ -17,7 +18,75 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     
+    public function make_invoice(Request $request)
+    {
+        //
+        // $this->validate($request,[
 
+        //     //
+        // ]);
+
+        Invoice::create([
+            'customer_id'=>$request->customer_id,
+            //$invoice->cart_date=$cart->cart_date;
+            'subtotal'=>$request->subtotal,
+            'discount'=>$request->discount,
+            'tax'=>$request->tax,
+            'total_price'=>$request->total_price,
+            'notes'=>$request->notes,
+        ]);
+
+        $invoice_id = Invoice::insertGetId([
+            'customer_id'=>$request->customer_id,
+            //$invoice->cart_date=$cart->cart_date;
+            'subtotal'=>$request->subtotal,
+            'discount'=>$request->discount,
+            'tax'=>$request->tax,
+            'total_price'=>$request->total_price,
+            'notes'=>$request->notes,
+        ]);
+
+
+        foreach ($request->product_id as $key => $value){
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->invoice_id=$invoice->invoice_id;
+            $invoiceItem->product_id=$request->product_id;
+            $invoiceItem->discount=$request->discount;
+            $invoiceItem->quantity=$request->quantity;
+            $invoiceItem->save();
+        }
+
+
+
+        // $invoice_items = InvoiceItem::create([
+        //     'invoice_id'=>$invoice_id,
+        //     'product_id'=>$request->product_id,
+        //     'discount'=>$request->discount,
+        //     'quantity'=>$request->quantity,
+        // ]);
+
+        // InvoiceItem::insert([$invoice_items]);
+        
+
+
+    
+            // $invoiceItem = new InvoiceItem();
+            // $invoiceItem->invoice_id=$invoice->invoice_id;
+            // $invoiceItem->product_id=$request->product_id;
+            // $invoiceItem->discount=$request->discount;
+            // $invoiceItem->quantity=$request->quantity;
+            // $invoiceItem->save();
+        //$invoice_items = InvoiceItem::create($request->all());
+        //$invoices = Invoice::with('invoice_items');
+        $invoice_invoice_items = Invoice::with('invoice_items')
+            ->where('id', $invoiceItem_id)->get();
+        return response()->json([
+            'status' => 'success',
+            'data' =>  $invoice_invoice_items,
+            //$cart_items->cart_items->get(),
+        ]);
+       
+    }
     public function byInvoiceId($id)
     {
         //
@@ -37,7 +106,8 @@ class InvoiceController extends Controller
     public function index()
     {
         //
-        $invoices = Invoice::with('invoice_items')->get();
+        $pagination = 15;
+        $invoices = Invoice::with('invoice_items')->paginate($pagination);
         return response()->json([
             'status' => 'success',
             'data' => $invoices,
