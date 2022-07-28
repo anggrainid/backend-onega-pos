@@ -58,7 +58,6 @@ class DatabaseSeeder extends Seeder
             "cart_id" => $cart->id,
             "product_id" => $product1->id,
             "discount_id" => $discount->id,
-            "discount" => 5000,
             "quantity" => 1,
             "subtotal" => 100000,
         ]);
@@ -66,7 +65,6 @@ class DatabaseSeeder extends Seeder
             "cart_id" => $cart->id,
             "product_id" => $product2->id,
             "discount_id" => $discount->id,
-            "discount" => 5000,
             "quantity" => 1,
             "subtotal" => 20000,
         ]);
