@@ -13,8 +13,8 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'sku_code',
         'discount_id',
+        'sku_code',
         'product_name',
         'description',
         'unit_price'
