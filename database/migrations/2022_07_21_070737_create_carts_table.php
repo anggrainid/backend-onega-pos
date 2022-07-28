@@ -16,10 +16,6 @@ class CreateCartsTable extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            //$table->foreignId('user_id');
-            //$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            //$table->date('cart_date')->nullable();
             $table->double('subtotal')->nullable();
             $table->double('discount')->nullable();
             $table->double('tax')->nullable();
@@ -27,6 +23,8 @@ class CreateCartsTable extends Migration
             $table->string('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

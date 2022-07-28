@@ -15,16 +15,14 @@ class CreateDiscountsTable extends Migration
     {
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('discount_id')->nullable();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->double('discount_amount')->nullable();
             $table->double('discount_percent')->nullable();
-            $table->boolean('is_active')->nullable();
             $table->enum('type', ['amount', 'percent']);
+            $table->text('product')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
     }
 

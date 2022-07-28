@@ -23,52 +23,53 @@ class DatabaseSeeder extends Seeder
             "code" => "NUMBER1",
             "name" => "I am number one",
             "address" => "yogyakarta",
-            "phone_num" => "6285800669010",
+            "phone_num" => "62812341234",
         ]);
 
         // DISCOUNT
         $discount = Discount::create([
             "name" => "Promo Merdeka 5%",
-            "discount_amount" => 5000
+            "discount_amount" => 5000,
+            "type" => "amount",
+            "product" => "all",
+            "is_active" => true,
         ]);
+
         // PRODUCT
         $product1 = Product::create([
-            "discount_id" => $discount->id,
             "sku_code" => "SKH-121",
             "product_name" => "Sun Kacang Hijau 100gr",
-            "description" => null,
+            "description" => "description sun kacang hijau",
             "unit_price" => 100000,
         ]);
         $product2 = Product::create([
-            "discount_id" => $discount->id,
             "sku_code" => "ZWS-543",
             "product_name" => "Zwitsal Soap Classic 100gr",
-            "description" => null,
+            "description" => "description zwitsal soap classic",
             "unit_price" => 20000,
         ]);
+
         // CARTS
         $cart = Cart::create([
             "customer_id" => $customer->id,
-            "subtotal" => 0,
+            "subtotal" => 120000,
             "discount" => 0,
-            "tax" => 0,
-            "total_price" => 100000,
+            "tax" => 12000,
+            "total_price" => 132000,
             "notes" => "notes",
         ]);
         // CARTS ITEM
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product1->id,
-            "discount_id" => $discount->id,
             "quantity" => 1,
-            "subtotal" => 100000,
+            "subtotal" => 95000,
         ]);
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product2->id,
-            "discount_id" => $discount->id,
             "quantity" => 1,
-            "subtotal" => 20000,
+            "subtotal" => 15000,
         ]);
     }
 }

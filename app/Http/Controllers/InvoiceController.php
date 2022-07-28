@@ -20,71 +20,28 @@ class InvoiceController extends Controller
     
     public function make_invoice(Request $request)
     {
-        //
-        // $this->validate($request,[
-
-        //     //
-        // ]);
-
-        Invoice::create([
+        $newInvoice = Invoice::create([
             'customer_id'=>$request->customer_id,
-            //$invoice->cart_date=$cart->cart_date;
             'subtotal'=>$request->subtotal,
             'discount'=>$request->discount,
             'tax'=>$request->tax,
             'total_price'=>$request->total_price,
             'notes'=>$request->notes,
         ]);
-
-        $invoice_id = Invoice::insertGetId([
-            'customer_id'=>$request->customer_id,
-            //$invoice->cart_date=$cart->cart_date;
-            'subtotal'=>$request->subtotal,
-            'discount'=>$request->discount,
-            'tax'=>$request->tax,
-            'total_price'=>$request->total_price,
-            'notes'=>$request->notes,
-        ]);
-
-
-        // foreach ($request->product_id as $key => $value){
-        //     $invoiceItem = new InvoiceItem();
-        //     $invoiceItem->invoice_id=$invoice->invoice_id[$key];
-        //     $invoiceItem->product_id=$request->product_id[$key];
-        //     $invoiceItem->discount=$request->discount[$key];
-        //     $invoiceItem->quantity=$request->quantity[$key];
-        //     $invoiceItem->save();
-        // }
-        foreach ($request->product_id as $key => $value){
-            InvoiceItem::insert([
-                'invoice_id'=>$invoice_id,
-                'product_id'=>$request->product_id[$key],
-                'discount'=>$request->discount[$key],
-                'quantity'=>$request->quantity[$key],
+        $newInvoiceItems = [];
+        foreach($request->items as $item){
+            $newInvoiceItem = InvoiceItem::create([
+                'invoice_id' => $newInvoice->id,
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'subtotal' => $item['subtotal'],
             ]);
+            $newInvoiceItems[] = $newInvoiceItem;
         }
 
-
-        // InvoiceItem::insert([
-        //     'invoice_id'=>$invoice_id,
-        //     'product_id'=>$request->product_id,
-        //     'discount'=>$request->discount,
-        //     'quantity'=>$request->quantity,
-        // ]);
-
-        // InvoiceItem::insert([$invoice_items]);
-        
-
-
-
-        //$invoice_items = InvoiceItem::create($request->all());
-        //$invoices = Invoice::with('invoice_items');
-        $invoice_invoice_items = Invoice::with('invoice_items')
-            ->where('id', $invoice_id)->get();
         return response()->json([
             'status' => 'success',
-            'data' =>  $invoice_invoice_items,
-            //$cart_items->cart_items->get(),
+            'data' =>  $newInvoice,
         ]);
        
     }
