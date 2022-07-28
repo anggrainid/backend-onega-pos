@@ -14,10 +14,5 @@ class Discount extends Model
         'discount_amount',
     ];
 
-    // public function discount(){
-    //     return $this->hasOne('App\Models\Product', 'product_id', 'id');
-
-    // }
-
 
 }

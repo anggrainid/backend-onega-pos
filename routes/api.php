@@ -53,6 +53,7 @@ Route::post('/cart_item/{id}/get_invoice_item',[CartItemController::class, 'get_
 
 Route::apiResource('invoices', InvoiceController::class)->except(['create', 'edit']);
 Route::get('/invoice/{id}',[InvoiceController::class, 'byInvoiceId'])->name('invoice.byInvoiceId');
+Route::post('/make_invoice',[InvoiceController::class, 'make_invoice'])->name('invoice.make_invoice');
 
 Route::apiResource('invoices_item', InvoiceItemController::class)->except(['create', 'edit']);
 Route::get('/invoice/{id}/invoice_items',[InvoiceItemController::class, 'byInvoice'])->name('invoice_items.byInvoice');

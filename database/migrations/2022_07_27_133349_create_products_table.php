@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('discount_id')->nullable();
+            //$table->unsignedBigInteger('discount_id')->nullable();
             $table->string('sku_code');
             $table->string('product_name')->nullable();
             $table->text('description')->nullable();
@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
+            //$table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
     }
 

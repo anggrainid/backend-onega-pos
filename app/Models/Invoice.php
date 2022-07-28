@@ -14,7 +14,7 @@ class Invoice extends Model
     protected $fillable = [
         'customer_id',
         'cart_id',
-        'cart_date',
+        //'cart_date',
         'subtotal',
         'discount',
         'tax',
