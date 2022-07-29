@@ -19,7 +19,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::with('invoice_items')->get();
+        $batas = 15;
+        $invoices = Invoice::with('invoice_items')->paginate($batas);
         return response()->json([
             'status' => 'success',
             'data' => $invoices,
