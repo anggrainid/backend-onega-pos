@@ -61,10 +61,13 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::with('invoice_items', 'customer')->find($id);
+
+        $invoice = Invoice::find($id);
+        $invoice_invoice_items = Invoice::with('invoice_items', 'customer')
+            ->where('id', $invoice->id)->get();
         return response()->json([
-            'status' => 'data retrieved successfully',
-            'data' => $invoice,
+            'status' => 'success',
+            'data' => $invoice_invoice_items,
         ]);
     }
 
@@ -113,6 +116,37 @@ class InvoiceController extends Controller
             'data' => null,
         ]);
     }
+    public function get_invoice($id)
+    {
+        $cart = Cart::find($id);
+        $cartItems = CartItem::where('cart_id', $id)->get()->all();
+
+        $invoice = new Invoice();    
+        $invoice->customer_id=$cart->customer_id;
+        $invoice->subtotal=$cart->subtotal;
+        $invoice->discount=$cart->discount;
+        $invoice->tax=$cart->tax;
+        $invoice->total_price=$cart->total_price;
+        $invoice->notes=$cart->notes;
+        $invoice->save();
+
+        foreach ($cartItems as $cartItem){
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->invoice_id=$cartItem->cart_id;
+            $invoiceItem->product_id=$cartItem->product_id;
+            $invoiceItem->discount=$cartItem->discount;
+            $invoiceItem->quantity=$cartItem->quantity;
+            $invoiceItem->price=$cartItem->price;
+            $invoiceItem->save();
+
+            $cartItem->delete();
+        }
+
+        $cart->delete();
+        return response()->json([
+            'status' => 'get invoice successfully',
+        ]);
+    }
 
     public function make_invoice(Request $request)
     {
@@ -153,14 +187,4 @@ class InvoiceController extends Controller
 
     }
 
-    public function byInvoiceId($id)
-    {
-        $invoice = Invoice::find($id);
-        $invoice_invoice_items = Invoice::with('invoice_items')
-            ->where('id', $invoice->id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $invoice_invoice_items,
-        ]);
-    }
 }
