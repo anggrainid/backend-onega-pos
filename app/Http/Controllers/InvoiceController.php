@@ -116,29 +116,41 @@ class InvoiceController extends Controller
 
     public function make_invoice(Request $request)
     {
-        $newInvoice = Invoice::create([
-            'customer_id'=>$request->customer_id,
-            'subtotal'=>$request->subtotal,
-            'discount'=>$request->discount,
-            'tax'=>$request->tax,
-            'total_price'=>$request->total_price,
-            'notes'=>$request->notes,
-        ]);
-        $newInvoiceItems = [];
-        foreach($request->items as $item){
-            $newInvoiceItem = InvoiceItem::create([
-                'invoice_id' => $newInvoice->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'subtotal' => $item['subtotal'],
+        DB::beginTransaction();
+        
+        try{
+            $newInvoice = Invoice::create([
+                'customer_id'=>$request->customer_id,
+                'subtotal'=>$request->subtotal,
+                'discount'=>$request->discount,
+                'tax'=>$request->tax,
+                'total_price'=>$request->total_price,
+                'notes'=>$request->notes,
             ]);
-            $newInvoiceItems[] = $newInvoiceItem;
+            $newInvoiceItems = [];
+            foreach($request->items as $item){
+                $newInvoiceItem = InvoiceItem::create([
+                    'invoice_id' => $newInvoice->id,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+                $newInvoiceItems[] = $newInvoiceItem;
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'data' =>  $newInvoice,
+            ]);
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'failed',
+            ]);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'data' =>  $newInvoice,
-        ]);
     }
 
     public function byInvoiceId($id)
