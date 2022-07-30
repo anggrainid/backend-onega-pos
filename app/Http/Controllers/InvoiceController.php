@@ -61,7 +61,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::with('invoice_items', 'customer')->find($id);
+        $invoice = Invoice::with('invoice_items.product', 'customer')->find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
             'data' => $invoice,
