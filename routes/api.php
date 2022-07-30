@@ -38,7 +38,6 @@ Route::get('/cart/{id}/cart_items',[CartItemController::class, 'byCart'])->name(
 
 // CART ITEMS API
 Route::apiResource('cart_items', CartItemController::class);
-Route::get('cart_items/getByCartId/{id}', [CartItemController::class, 'getByCartId']);
 Route::post('/cart_items/{id}/get_invoice_item',[CartItemController::class, 'get_invoice_item'])->name('cart_items.getInvoiceItem');
 
 // INVOICES API

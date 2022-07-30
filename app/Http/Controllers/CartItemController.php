@@ -23,6 +23,7 @@ class CartItemController extends Controller
             'status' => 'success',
             'data' => $cartItem
         ]);
+
     }
 
     /**
@@ -59,10 +60,11 @@ class CartItemController extends Controller
      */
     public function show($id)
     {
-        $cartItem = CartItem::with('cart', 'product')->find($id);
+
+        $cartItem = CartItem::with('cart','product')->where('cart_id', $id)->get();
         return response()->json([
-            'status' => 'data added successfully',
-            'data' => $cartItem,
+            'status' => 'success',
+            'data' => $cartItem
         ]);
     }
 
@@ -113,40 +115,4 @@ class CartItemController extends Controller
         ]);
     }
 
-    public function get_invoice_item($id)
-    {
-        $cartItem = CartItem::find($id);
-        
-        $invoiceItem = new InvoiceItem();
-        $invoiceItem->invoice_id=$cartItem->cart_id;
-        $invoiceItem->product_id=$cartItem->product_id;
-        $invoiceItem->discount=$cartItem->discount;
-        $invoiceItem->quantity=$cartItem->quantity;
-        $invoiceItem->price=$cartItem->price;
-        $invoiceItem->save();
-        
-        $cartItem->delete();
-
-        return response()->json([
-            'status' => 'get invoice item successfully',
-            'data' => $invoiceItem,
-        ]);
-    }
-
-    public function byCart($id)
-    {
-        $cart = Cart::find($id);
-        return response()->json([
-            'status' => 'success',
-            'data' => $cart->cart_items,
-        ]);
-    }
-
-    public function getByCartId($id) {
-        $cartItem = CartItem::with('product')->where('cart_id', $id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $cartItem
-        ]);
-    }
 }

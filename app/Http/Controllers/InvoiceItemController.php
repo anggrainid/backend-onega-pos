@@ -114,4 +114,24 @@ class InvoiceItemController extends Controller
             'data' => $invoice ->invoice_items,
         ]);
     }
+
+    public function get_invoice_item($id)
+    {
+        $cartItem = CartItem::find($id);
+        
+        $invoiceItem = new InvoiceItem();
+        $invoiceItem->invoice_id=$cartItem->cart_id;
+        $invoiceItem->product_id=$cartItem->product_id;
+        $invoiceItem->discount=$cartItem->discount;
+        $invoiceItem->quantity=$cartItem->quantity;
+        $invoiceItem->price=$cartItem->price;
+        $invoiceItem->save();
+        
+        $cartItem->delete();
+
+        return response()->json([
+            'status' => 'get invoice item successfully',
+            'data' => $invoiceItem,
+        ]);
+    }
 }

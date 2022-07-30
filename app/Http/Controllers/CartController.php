@@ -124,38 +124,6 @@ class CartController extends Controller
         ]);
     }
 
-    public function get_invoice($id)
-    {
-        $cart = Cart::find($id);
-        $cartItems = CartItem::where('cart_id', $id)->get()->all();
-
-        $invoice = new Invoice();    
-        $invoice->customer_id=$cart->customer_id;
-        $invoice->subtotal=$cart->subtotal;
-        $invoice->discount=$cart->discount;
-        $invoice->tax=$cart->tax;
-        $invoice->total_price=$cart->total_price;
-        $invoice->notes=$cart->notes;
-        $invoice->save();
-
-        foreach ($cartItems as $cartItem){
-            $invoiceItem = new InvoiceItem();
-            $invoiceItem->invoice_id=$cartItem->cart_id;
-            $invoiceItem->product_id=$cartItem->product_id;
-            $invoiceItem->discount=$cartItem->discount;
-            $invoiceItem->quantity=$cartItem->quantity;
-            $invoiceItem->price=$cartItem->price;
-            $invoiceItem->save();
-
-            $cartItem->delete();
-        }
-
-        $cart->delete();
-        return response()->json([
-            'status' => 'get invoice successfully',
-        ]);
-    }
-
     public function byCartId($id)
     {
         $cart = Cart::find($id);
