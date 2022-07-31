@@ -23,16 +23,18 @@ class DatabaseSeeder extends Seeder
         // CUSTOMER
         $customer = Customer::create([
             "code" => "NUMBER1",
-            "name" => "I am number one",
+            "name" => "I am number 1",
             "address" => "yogyakarta",
             "phone_num" => "62812341234",
         ]);
-        Customer::create([
-            "code" => "NUMBER2",
-            "name" => "I am number two",
-            "address" => "tegal",
-            "phone_num" => "62843214321",
-        ]);
+        for($i = 2; $i <= 10; ++$i) {
+            Customer::create([
+                "code" => "NUMBER" . $i,
+                "name" => "I am number " . $i,
+                "address" => "dimana mana hatiku senang",
+                "phone_num" => "62812341234",
+            ]);
+        }
 
         // DISCOUNT
         $discount = Discount::create([
