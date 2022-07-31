@@ -19,7 +19,8 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::with('invoice_items')->get();
+        $batas = 15;
+        $invoices = Invoice::with('invoice_items')->paginate($batas);
         return response()->json([
             'status' => 'success',
             'data' => $invoices,
@@ -62,9 +63,10 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Invoice::with('invoice_items.product', 'customer')->find($id);
+     
         return response()->json([
-            'status' => 'data retrieved successfully',
-            'data' => $invoice,
+            'status' => 'success',
+            'data' => $invoice_invoice_items,
         ]);
     }
 
@@ -113,42 +115,75 @@ class InvoiceController extends Controller
             'data' => null,
         ]);
     }
+    public function get_invoice($id)
+    {
+        $cart = Cart::find($id);
+        $cartItems = CartItem::where('cart_id', $id)->get()->all();
+
+        $invoice = new Invoice();    
+        $invoice->customer_id=$cart->customer_id;
+        $invoice->subtotal=$cart->subtotal;
+        $invoice->discount=$cart->discount;
+        $invoice->tax=$cart->tax;
+        $invoice->total_price=$cart->total_price;
+        $invoice->notes=$cart->notes;
+        $invoice->save();
+
+        foreach ($cartItems as $cartItem){
+            $invoiceItem = new InvoiceItem();
+            $invoiceItem->invoice_id=$cartItem->cart_id;
+            $invoiceItem->product_id=$cartItem->product_id;
+            $invoiceItem->discount=$cartItem->discount;
+            $invoiceItem->quantity=$cartItem->quantity;
+            $invoiceItem->price=$cartItem->price;
+            $invoiceItem->save();
+
+            $cartItem->delete();
+        }
+
+        $cart->delete();
+        return response()->json([
+            'status' => 'get invoice successfully',
+        ]);
+    }
 
     public function make_invoice(Request $request)
     {
-        $newInvoice = Invoice::create([
-            'customer_id'=>$request->customer_id,
-            'subtotal'=>$request->subtotal,
-            'discount'=>$request->discount,
-            'tax'=>$request->tax,
-            'total_price'=>$request->total_price,
-            'notes'=>$request->notes,
-        ]);
-        $newInvoiceItems = [];
-        foreach($request->items as $item){
-            $newInvoiceItem = InvoiceItem::create([
-                'invoice_id' => $newInvoice->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'subtotal' => $item['subtotal'],
+        DB::beginTransaction();
+        
+        try{
+            $newInvoice = Invoice::create([
+                'customer_id'=>$request->customer_id,
+                'subtotal'=>$request->subtotal,
+                'discount'=>$request->discount,
+                'tax'=>$request->tax,
+                'total_price'=>$request->total_price,
+                'notes'=>$request->notes,
             ]);
-            $newInvoiceItems[] = $newInvoiceItem;
+            $newInvoiceItems = [];
+            foreach($request->items as $item){
+                $newInvoiceItem = InvoiceItem::create([
+                    'invoice_id' => $newInvoice->id,
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+                $newInvoiceItems[] = $newInvoiceItem;
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'data' =>  $newInvoice,
+            ]);
+
+        }catch(\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'failed',
+            ]);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'data' =>  $newInvoice,
-        ]);
     }
 
-    public function byInvoiceId($id)
-    {
-        $invoice = Invoice::find($id);
-        $invoice_invoice_items = Invoice::with('invoice_items')
-            ->where('id', $invoice->id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $invoice_invoice_items,
-        ]);
-    }
 }
