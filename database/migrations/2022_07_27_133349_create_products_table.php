@@ -19,8 +19,11 @@ class CreateProductsTable extends Migration
             $table->string('product_name')->nullable();
             $table->text('description')->nullable();
             $table->double('unit_price')->nullable();
+            $table->unsignedBigInteger('discount_id');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('discount_id')->references('id')->on('discounts')->onDelete('cascade');
         });
     }
 

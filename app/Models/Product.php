@@ -13,11 +13,11 @@ class Product extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'discount_id',
         'sku_code',
         'product_name',
         'description',
-        'unit_price'
+        'unit_price',
+        'discount_id',
     ];
 
     public function discount(){
