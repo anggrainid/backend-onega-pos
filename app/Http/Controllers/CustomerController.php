@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
@@ -35,6 +37,14 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'code'=> 'required|string|unique',
+            'name'=> 'required|string',
+            'address'=> 'string',
+            'phone_num'=> 'string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $cust = new Customer;
         $cust->code = $request->code;
         $cust->name= $request->name;
@@ -87,6 +97,14 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        $rules = [
+            'code'=> 'string|unique',
+            'name'=> 'string',
+            'address'=> 'string',
+            'phone_num'=> 'string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $cust = Customer::findOrFail($id);
         $cust->update($request->all());
 

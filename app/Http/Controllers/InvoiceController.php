@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Cart;
-use Illuminate\Validation\Rule;
 
 class InvoiceController extends Controller
 {
@@ -45,6 +46,16 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'customer_id'=> 'required|integer',
+            'subtotal'=> 'required|numeric',
+            'discount'=> 'required|numeric',
+            'tax'=> 'required|numeric',
+            'total_price'=> 'required|numeric',
+            'notes'=> 'required|string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $invoice = Invoice::create($request->all());
 
         return response()->json([
@@ -66,7 +77,7 @@ class InvoiceController extends Controller
      
         return response()->json([
             'status' => 'success',
-            'data' => $invoice_invoice_items,
+            'data' => $invoice,
         ]);
     }
 
@@ -90,6 +101,16 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'customer_id'=> 'integer',
+            'subtotal'=> 'numeric',
+            'discount'=> 'numeric',
+            'tax'=> 'numeric',
+            'total_price'=> 'numeric',
+            'notes'=> 'string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $invoice = Invoice::find($id);
         $invoice = $invoice->update($request->all());
 
@@ -108,6 +129,11 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         $invoice = Invoice::find($id);
+        $invoice_items = InvoiceItem::where('invoice_id',$invoice->id)->get()->all();
+
+        foreach($invoice_items as $invoice_item){
+            $invoice_item->delete();
+        }
         $invoice->delete();
 
         return response()->json([

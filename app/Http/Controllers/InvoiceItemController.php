@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -15,7 +17,7 @@ class InvoiceItemController extends Controller
      */    
     public function index()
     {
-        $invoiceItem = InvoiceItem::all();
+        $invoiceItem = InvoiceItem::with('product','invoice')->get();
         return response()->json([
             'status' => 'success',
             'data' => $invoiceItem
@@ -40,6 +42,14 @@ class InvoiceItemController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'invoice_id'=> 'required|integer',
+            'product_id'=> 'required|numeric',
+            'discount'=> 'required|numeric',
+            'quantity'=> 'required|numeric',
+            'subtotal'=> 'numeric',
+        ];
+        $validator = Validator::make($request->all(),$rules);
         $invoiceItem = InvoiceItem::create($request->all());
         return response()->json([
             'status' => 'success',
@@ -82,6 +92,15 @@ class InvoiceItemController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'invoice_id'=> 'integer',
+            'product_id'=> 'integer',
+            'discount'=> 'numeric',
+            'quantity'=> 'numeric',
+            'subtotal'=> 'numeric',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $invoiceItem = InvoiceItem::find($id);
         $invoiceItem->update($request->all());
         return response()->json([

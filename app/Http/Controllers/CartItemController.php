@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Invoce;
 use App\Models\InvoiceItem;
+use Illuminate\Validation\Rule;
 
 class CartItemController extends Controller
 {
@@ -18,7 +20,7 @@ class CartItemController extends Controller
      */
     public function index()
     {
-        $cartItem = CartItem::with('product')->get();
+        $cartItem = CartItem::with('product','cart')->get();
         return response()->json([
             'status' => 'success',
             'data' => $cartItem
@@ -44,6 +46,14 @@ class CartItemController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'cart_id'=> 'required|integer',
+            'product_id'=> 'required|numeric',
+            'discount'=> 'required|numeric',
+            'quantity'=> 'required|numeric',
+            'subtotal'=> 'numeric',
+        ];
+        $validator = Validator::make($request->all(),$rules);
         $cartItem = CartItem::create($request->all());
 
         return response()->json([
@@ -61,7 +71,7 @@ class CartItemController extends Controller
     public function show($id)
     {
 
-        $cartItem = CartItem::with('cart','product')->where('cart_id', $id)->get();
+        $cartItem = CartItem::with('cart','product')->find($id);
         return response()->json([
             'status' => 'success',
             'data' => $cartItem
@@ -88,6 +98,15 @@ class CartItemController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'cart_id'=> 'integer',
+            'product_id'=> 'integer',
+            'discount'=> 'numeric',
+            'quantity'=> 'numeric',
+            'subtotal'=> 'numeric',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $cartItem = CartItem::findOrFail($id);
         $cartItem->update($request->all());
 

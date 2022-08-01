@@ -99,6 +99,16 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'customer_id'=> 'integer',
+            'subtotal'=> 'numeric',
+            'discount'=> 'numeric',
+            'tax'=> 'numeric',
+            'total_price'=> 'numeric',
+            'notes'=> 'string',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $cart = Cart::findOrFail($id);
         $cart->update($request->all());
         return response()->json([
@@ -116,6 +126,11 @@ class CartController extends Controller
     public function destroy($id)
     {
         $cart = Cart::find($id);
+        $cart_items = CartItem::where('cart_id', $cart->id)->get()->all();
+
+        foreach($cart_items as $cart_item){
+            $cart_item->delete();
+        }
         $cart->delete();
 
         return response()->json([
@@ -124,14 +139,4 @@ class CartController extends Controller
         ]);
     }
 
-    public function byCartId($id)
-    {
-        $cart = Cart::find($id);
-        $cart_cart_items = Cart::with('cart_items')
-            ->where('id', $cart->id)->get();
-        return response()->json([
-            'status' => 'success',
-            'data' => $cart_cart_items,
-        ]);
-    }
 }

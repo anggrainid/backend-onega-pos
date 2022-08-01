@@ -41,7 +41,6 @@ class DatabaseSeeder extends Seeder
             "name" => "Promo Merdeka 5%",
             "discount_amount" => 5000,
             "type" => "amount",
-            "product" => "all",
             "is_active" => true,
         ]);
 

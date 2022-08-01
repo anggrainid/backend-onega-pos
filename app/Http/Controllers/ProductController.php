@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Models\Product;
 
@@ -40,6 +42,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $rules = [
+            'sku_code'=> 'required|string',
+            'product_name'=> 'required|string',
+            'description'=> 'string',
+            'unit_price'=> 'required|numeric',
+            'discount_id'=> 'integer',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $product = Product::create($request->all());
 
         return response()->json([
@@ -83,11 +94,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $rules = [
+            'sku_code'=> 'string',
+            'product_name'=> 'string',
+            'description'=> 'string',
+            'unit_price'=> 'numeric',
+            'discount_id'=> 'integer',
+        ];
+        $validator = Validator::make($request->all(),$rules);
+        
         $product = Product::find($id);
         $product->update($request->all());
 
         return response()->json([
-            'status' => 'data added successfully',
+            'status' => 'data upddated successfully',
             'data' => $product,
         ]);
     }
