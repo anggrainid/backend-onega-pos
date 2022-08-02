@@ -37,9 +37,15 @@ class DatabaseSeeder extends Seeder
         }
 
         // DISCOUNT
-        $discount = Discount::create([
+        $discount1 = Discount::create([
             "name" => "Promo Merdeka 5%",
-            "discount_amount" => 5000,
+            "discount_percent" => 5,
+            "type" => "percent",
+            "is_active" => true,
+        ]);
+        $discount2 = Discount::create([
+            "name" => "Promo 17 Agustus",
+            "discount_amount" => 17000,
             "type" => "amount",
             "is_active" => true,
         ]);
@@ -50,12 +56,14 @@ class DatabaseSeeder extends Seeder
             "product_name" => "Sun Kacang Hijau 100gr",
             "description" => "description sun kacang hijau",
             "unit_price" => 100000,
+            "discount_id" => $discount1->id,
         ]);
         $product2 = Product::create([
             "sku_code" => "ZWS-543",
             "product_name" => "Zwitsal Soap Classic 100gr",
             "description" => "description zwitsal soap classic",
             "unit_price" => 20000,
+            "discount_id" => $discount2->id
         ]);
 
         // CARTS
@@ -71,13 +79,13 @@ class DatabaseSeeder extends Seeder
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product1->id,
-            "quantity" => 1,
+            "quantity" => 2,
             "subtotal" => 95000,
         ]);
         CartItem::create([
             "cart_id" => $cart->id,
             "product_id" => $product2->id,
-            "quantity" => 1,
+            "quantity" => 2,
             "subtotal" => 15000,
         ]);
 
@@ -94,7 +102,7 @@ class DatabaseSeeder extends Seeder
         InvoiceItem::create([
             "invoice_id" => $invoice->id,
             "product_id" => $product1->id,
-            "quantity" => 1,
+            "quantity" => 2,
             "subtotal" => 95000,
         ]);
     }

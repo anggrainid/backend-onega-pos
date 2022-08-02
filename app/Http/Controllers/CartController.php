@@ -72,7 +72,7 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        $cart = Cart::with('cart_items.product')->find($id);
+        $cart = Cart::with('cart_items.product.discount')->find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
             'data' => $cart,
