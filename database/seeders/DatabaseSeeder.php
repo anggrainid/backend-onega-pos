@@ -9,6 +9,7 @@ use App\Models\CartItem;
 use App\Models\Discount;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -104,6 +105,11 @@ class DatabaseSeeder extends Seeder
             "product_id" => $product1->id,
             "quantity" => 2,
             "subtotal" => 95000,
+        ]);
+        User::create([
+            "name"=> "Admin",
+            "email"=> "admin@gmail.com",
+            "password"=> bcrypt("12345678"),
         ]);
     }
 }
