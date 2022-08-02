@@ -10,6 +10,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceItemController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,27 +29,39 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
+
+//API route for register new user
+Route::post('/register', [AuthController::class, 'register']);
+//API route for login user
+Route::post('/login', [AuthController::class, 'login']);
+
+//Protecting Routes
+Route::group(['middleware' => ['auth:sanctum']], function () {
 // CUSTOMERS API
-Route::apiResource('customers', CustomerController::class);
-Route::get('/customer/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
+    Route::apiResource('customers', CustomerController::class);
+    Route::get('/customer/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
 
-// CARTS API
-Route::apiResource('carts', CartController::class);
-Route::get('/cart/{id}/cart_items',[CartItemController::class, 'byCart'])->name('cart_items.byCart');
+    // CARTS API
+    Route::apiResource('carts', CartController::class);
+    Route::get('/cart/{id}/cart_items',[CartItemController::class, 'byCart'])->name('cart_items.byCart');
 
-// CART ITEMS API
-Route::apiResource('cart_items', CartItemController::class);
-Route::post('/cart_items/{id}/get_invoice_item',[CartItemController::class, 'get_invoice_item'])->name('cart_items.getInvoiceItem');
+    // CART ITEMS API
+    Route::apiResource('cart_items', CartItemController::class);
+    Route::post('/cart_items/{id}/get_invoice_item',[CartItemController::class, 'get_invoice_item'])->name('cart_items.getInvoiceItem');
 
-// INVOICES API
-Route::apiResource('invoices', InvoiceController::class);
-Route::post('/invoices/make_invoice',[InvoiceController::class, 'make_invoice'])->name('invoice.make_invoice');
+    // INVOICES API
+    Route::apiResource('invoices', InvoiceController::class);
+    Route::post('/invoices/make_invoice',[InvoiceController::class, 'make_invoice'])->name('invoice.make_invoice');
 
-// INVOICE ITEMS API
-Route::apiResource('invoice_items', InvoiceItemController::class);
+    // INVOICE ITEMS API
+    Route::apiResource('invoice_items', InvoiceItemController::class);
 
-// PRODUCTS API
-Route::apiResource('products', ProductController::class);
+    // PRODUCTS API
+    Route::apiResource('products', ProductController::class);
 
-// DISCOUNTS API
-Route::apiResource('discounts', DiscountController::class);
+    // DISCOUNTS API
+    Route::apiResource('discounts', DiscountController::class);
+
+    // API route for logout user
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
