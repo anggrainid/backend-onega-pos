@@ -139,4 +139,12 @@ class CartController extends Controller
         ]);
     }
 
+    public function getByCustomer($customerId) {
+        $carts = Cart::with('cart_items.product.discount')->where('customer_id', $customerId)->first();
+        return response()->json([
+            'status' => 'success',
+            'data' => $carts,
+        ]);
+    }
+
 }
