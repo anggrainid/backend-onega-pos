@@ -47,6 +47,8 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // $request -> session()->regenerate();
+
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -64,9 +66,29 @@ class AuthController extends Controller
     {
         auth()->user()->tokens()->delete();
 
+        // $request -> session()->invalidate();
+        // $request -> session()->regenerateToken();
+
         return [
             'status' => 'successfully logged out and the token was successfully deleted',
             'data'=> null,
         ];
+    }
+
+    public function user(Request $request)
+    {
+        $user = $request->user();
+        
+        return [
+            'status' => 'get user',
+            'data'=> $user,
+        ];
+        // $token = auth()->user()->tokens()->get();
+
+        // $user = User::where('')
+        // return [
+        //     'status' => 'successfully logged out and the token was successfully deleted',
+        //     'data'=> $user,
+        // ];
     }
 }
