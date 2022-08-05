@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Cart;
+use App\Models\CartItem;
 
 class InvoiceController extends Controller
 {
@@ -73,7 +74,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::with('invoice_items.product', 'customer')->find($id);
+        $invoice = Invoice::with('invoice_items.product.discount', 'customer')->find($id);
      
         return response()->json([
             'status' => 'success',
