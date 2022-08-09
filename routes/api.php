@@ -39,7 +39,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // CUSTOMERS API
     Route::apiResource('customers', CustomerController::class);
-    Route::get('/customer/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
+    Route::get('/customers/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
 
     // CARTS API
     Route::apiResource('carts', CartController::class);

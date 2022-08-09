@@ -89,6 +89,66 @@ class DatabaseSeeder extends Seeder
             "quantity" => 2,
             "subtotal" => 15000,
         ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product1->id,
+            "quantity" => 2,
+            "subtotal" => 95000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product2->id,
+            "quantity" => 2,
+            "subtotal" => 15000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product1->id,
+            "quantity" => 2,
+            "subtotal" => 95000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product2->id,
+            "quantity" => 2,
+            "subtotal" => 15000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product1->id,
+            "quantity" => 2,
+            "subtotal" => 95000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product2->id,
+            "quantity" => 2,
+            "subtotal" => 15000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product1->id,
+            "quantity" => 2,
+            "subtotal" => 95000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product2->id,
+            "quantity" => 2,
+            "subtotal" => 15000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product1->id,
+            "quantity" => 2,
+            "subtotal" => 95000,
+        ]);
+        CartItem::create([
+            "cart_id" => $cart->id,
+            "product_id" => $product2->id,
+            "quantity" => 2,
+            "subtotal" => 15000,
+        ]);
 
         // INVOICES
         $invoice = Invoice::create([
