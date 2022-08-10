@@ -72,7 +72,7 @@ class CartController extends Controller
      */
     public function show($id)
     {
-        $cart = Cart::with('cart_items.product')->find($id);
+        $cart = Cart::with('cart_items.product.discount')->find($id);
         return response()->json([
             'status' => 'data retrieved successfully',
             'data' => $cart,
@@ -136,6 +136,14 @@ class CartController extends Controller
         return response()->json([
             'status' => 'data deleted successuflly',
             'data' => null,
+        ]);
+    }
+
+    public function getByCustomer($customerId) {
+        $carts = Cart::with('cart_items.product.discount')->where('customer_id', $customerId)->first();
+        return response()->json([
+            'status' => 'success',
+            'data' => $carts,
         ]);
     }
 

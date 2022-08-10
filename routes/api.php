@@ -37,12 +37,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
-// CUSTOMERS API
+    // CUSTOMERS API
     Route::apiResource('customers', CustomerController::class);
-    Route::get('/customer/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
+    Route::get('/customers/search/{keyword}',[CustomerController::class, 'search'])->name('customer.search');
 
     // CARTS API
     Route::apiResource('carts', CartController::class);
+    Route::get('/carts/by_customer/{customerId}', [CartController::class, 'getByCustomer'])->name('carts.byCustomer');
     Route::get('/cart/{id}/cart_items',[CartItemController::class, 'byCart'])->name('cart_items.byCart');
 
     // CART ITEMS API
