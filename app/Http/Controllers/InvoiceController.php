@@ -198,10 +198,14 @@ class InvoiceController extends Controller
                 $newInvoiceItems[] = $newInvoiceItem;
             }
             $cart = Cart::where('customer_id', $request->customer_id)->first();
-            $cartItems = CartItem::where('cart_id', $cart->id)->get();
-            $cart->delete();
-            foreach($cartItems as $cartItem){
-                $cartItem->delete();
+            if($cart) {
+                $cartItems = CartItem::where('cart_id', $cart->id)->get();
+                if($cartItems) {
+                    $cart->delete();
+                    foreach($cartItems as $cartItem){
+                        $cartItem->delete();
+                    }
+                }
             }
 
             DB::commit();
