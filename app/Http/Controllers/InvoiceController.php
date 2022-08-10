@@ -197,6 +197,7 @@ class InvoiceController extends Controller
                 ]);
                 $newInvoiceItems[] = $newInvoiceItem;
             }
+            $newInvoice->items = $newInvoiceItems;
             $cart = Cart::where('customer_id', $request->customer_id)->first();
             if($cart) {
                 $cartItems = CartItem::where('cart_id', $cart->id)->get();
