@@ -56,12 +56,22 @@ class CartController extends Controller
             'notes'=> 'required|string',
         ];
         $validator = Validator::make($request->all(),$rules);
-        $cart = Cart::create($request->all());
 
-        return response()->json([
-            'status' => 'Cart added successfully',
-            'data' => $cart,
-        ]);
+        $customerId = $request->customer_id;
+        $check = Cart::where('customer_id', $customerId)->first();
+        if($check) {
+            $check->update($request->all());
+            return response()->json([
+                'status' => 'Cart added successfully',
+                'data' => $check,
+            ]);
+        } else {
+            $cart = Cart::create($request->all());
+            return response()->json([
+                'status' => 'Cart added successfully',
+                'data' => $cart,
+            ]);
+        }
     }
 
     /**
