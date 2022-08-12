@@ -54,8 +54,15 @@ class CartItemController extends Controller
             'subtotal'=> 'numeric',
         ];
         $validator = Validator::make($request->all(),$rules);
+        $cartId = $request->cart_id;
+        $check = CartItem::where('cart_id', $cartId)->get();
+        if ($check) {
+            foreach ($check as $cartItem) {
+                $cartItem->delete();
+            }
+        }
         $cartItem = CartItem::create($request->all());
-
+        
         return response()->json([
             'status' => 'data added successfully',
             'data' => $cartItem,
@@ -133,5 +140,4 @@ class CartItemController extends Controller
             'data' => null,
         ]);
     }
-
 }

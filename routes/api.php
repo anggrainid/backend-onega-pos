@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // CART ITEMS API
     Route::apiResource('cart_items', CartItemController::class);
     Route::post('/cart_items/{id}/get_invoice_item',[CartItemController::class, 'get_invoice_item'])->name('cart_items.getInvoiceItem');
+    // Route::post('cart_items_store_many', [CartItemController::class, 'storeMany'])->name('cart_items.storeMany');
 
     // INVOICES API
     Route::apiResource('invoices', InvoiceController::class);
